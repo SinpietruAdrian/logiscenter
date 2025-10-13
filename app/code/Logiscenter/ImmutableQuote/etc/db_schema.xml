@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+
+    <table name="quote_metadata" resource="default" engine="innodb" comment="Quote Metadata Table">
+        <column xsi:type="int" name="metadata_id" unsigned="true" nullable="false" identity="true"
+                comment="Entity Id"/>
+        <column xsi:type="int" name="quote_id" unsigned="true" nullable="false" comment="Quote ID FK"/>
+        <column xsi:type="smallint" name="is_immutable" nullable="false" default="1" comment="Immutable Quote Flag"/>
+        <!--        The purpose of this column is to have a user-friendly text for the quotes listing-->
+        <column xsi:type="varchar" name="title" nullable="false" length="512" comment="Quote Title"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="metadata_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="QUOTE_ENTITY_ID_QUOTE_METADATA_QUOTE_ID"
+                    table="quote_metadata" column="quote_id" referenceTable="quote"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+    </table>
+</schema>

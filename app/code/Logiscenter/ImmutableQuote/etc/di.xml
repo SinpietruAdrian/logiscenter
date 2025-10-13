@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Logiscenter\ImmutableQuote\Api\Data\QuoteMetadataInterface"
+                type="Logiscenter\ImmutableQuote\Model\QuoteMetadata"/>
+    <preference for="Logiscenter\ImmutableQuote\Api\ImmutableQuoteManagementInterface"
+                type="Logiscenter\ImmutableQuote\Model\ImmutableQuoteManagement"/>
+    <preference for="Logiscenter\ImmutableQuote\Api\QuoteMetadataRepositoryInterface"
+                type="Logiscenter\ImmutableQuote\Model\QuoteMetadataRepository"/>
+
+    <type name="Magento\Quote\Api\Data\CartInterface">
+        <plugin name="immutable_quote_set_metadata"
+                type="Logiscenter\ImmutableQuote\Plugin\SetQuoteMetadata"/>
+    </type>
+</config>
