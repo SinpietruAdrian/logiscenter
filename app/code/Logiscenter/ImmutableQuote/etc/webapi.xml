@@ -9,4 +9,14 @@
             <resource ref="Logiscenter_ImmutableQuote::manage"/>
         </resources>
     </route>
+    <route url="/V1/immutable-quotes/quotes/:quoteId/enable" method="POST">
+        <service class="Logiscenter\ImmutableQuote\Api\ImmutableQuoteManagementInterface"
+                 method="activate"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
 </routes>

@@ -18,7 +18,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Quote\Api\Data\CartInterfaceFactory;
 use Magento\Framework\Event\ManagerInterface;
 
-class ImmutableQuoteManagement  implements ImmutableQuoteManagementInterface
+class ImmutableQuoteManagement implements ImmutableQuoteManagementInterface
 {
     public function __construct(
         private readonly QuoteMetadataRepositoryInterface $quoteMetadataRepository,
@@ -85,5 +85,35 @@ class ImmutableQuoteManagement  implements ImmutableQuoteManagementInterface
         $this->quoteRepository->save($quote);
 
         return $quote;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function activate(int $quoteId, int $customerId): bool
+    {
+        $quote = $this->quoteRepository->get($quoteId);
+        if ((int)$quote->getCustomerId() !== $customerId) {
+            throw new LocalizedException(__('Quote does not belong the logged in customer'));
+        }
+
+        $connection = $this->resourceConnection->getConnection();
+        $connection->update(
+            $connection->getTableName('quote'),
+            ['is_active' => 0],
+            ['customer_id = ? and is_active = 1' => $customerId]
+        );
+
+        $quote->setIsActive(true);
+        $this->quoteRepository->save($quote);
+        $this->eventManager->dispatch(
+            'immutable_quote_activated',
+            [
+                'quote' => $quote,
+                'customer_id' => $customerId
+            ]
+        );
+
+        return true;
     }
 }
