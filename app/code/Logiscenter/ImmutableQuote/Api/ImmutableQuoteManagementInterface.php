@@ -24,7 +24,7 @@ interface ImmutableQuoteManagementInterface
      *
      * @param int $quoteId
      * @param int $customerId
-     * @throws LocalizedException
+     * @throws LocalizedException|CouldNotSaveException
      * @return bool
      */
     public function activate(int $quoteId, int $customerId): bool;

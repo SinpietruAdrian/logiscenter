@@ -49,7 +49,6 @@ class SetQuoteMetadata
 
                 $subject->setExtensionAttributes($cartExtension);
             } catch (NoSuchEntityException $e) {
-                return $cartExtension;
             }
         }
 

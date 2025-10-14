@@ -10,7 +10,7 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 
-class ShippingMethodFilter
+class FilterShippingMethod
 {
     public function __construct(
         private readonly CartRepositoryInterface $quoteRepository,
@@ -24,7 +24,6 @@ class ShippingMethodFilter
      * @param ShippingMethodManagementInterface $subject
      * @param array $result
      * @param $cartId
-     * @param $addressId
      * @throws NoSuchEntityException
      * @return ShippingMethodInterface[]
      */

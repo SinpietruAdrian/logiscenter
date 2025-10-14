@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Logiscenter\ImmutableQuote\Model;
 
 use Logiscenter\ImmutableQuote\Api\Data\QuoteMetadataInterface;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 class QuoteMetadata extends AbstractExtensibleModel implements QuoteMetadataInterface

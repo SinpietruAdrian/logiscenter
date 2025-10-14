@@ -14,7 +14,7 @@
                 type="Logiscenter\ImmutableQuote\Plugin\SetQuoteMetadata"/>
     </type>
     <type name="Magento\Quote\Api\ShippingMethodManagementInterface">
-        <plugin name="immutable_quote_shipping_methods_filter"
-                type="Logiscenter\ImmutableQuote\Plugin\ShippingMethodFilter"/>
+        <plugin name="immutable_quote_filter_shipping_methods"
+                type="Logiscenter\ImmutableQuote\Plugin\FilterShippingMethod"/>
     </type>
 </config>

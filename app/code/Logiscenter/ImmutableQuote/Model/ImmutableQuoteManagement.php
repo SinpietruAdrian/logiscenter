@@ -14,6 +14,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Quote\Api\Data\CartInterfaceFactory;
 use Magento\Framework\Event\ManagerInterface;
@@ -28,7 +29,8 @@ class ImmutableQuoteManagement implements ImmutableQuoteManagementInterface
         private readonly CartInterfaceFactory $quoteFactory,
         private readonly CartRepositoryInterface $quoteRepository,
         private readonly CustomerRepositoryInterface $customerRepository,
-        private readonly ManagerInterface $eventManager
+        private readonly ManagerInterface $eventManager,
+        private readonly CollectionFactory $orderCollectionFactory
     )
     {
 
@@ -97,15 +99,36 @@ class ImmutableQuoteManagement implements ImmutableQuoteManagementInterface
             throw new LocalizedException(__('Quote does not belong the logged in customer'));
         }
 
-        $connection = $this->resourceConnection->getConnection();
-        $connection->update(
-            $connection->getTableName('quote'),
-            ['is_active' => 0],
-            ['customer_id = ? and is_active = 1' => $customerId]
-        );
+        if ($this->isAssociatedToOrder($quoteId)) {
+            throw new LocalizedException(__('Quote with id "%1" was already used to place an order', $quoteId));
+        }
 
-        $quote->setIsActive(true);
-        $this->quoteRepository->save($quote);
+        if ($quote->getIsActive()) {
+            return true;
+        }
+
+        $connection = $this->resourceConnection->getConnection();
+        $connection->beginTransaction();
+
+        try {
+            $connection->update(
+                $connection->getTableName('quote'),
+                ['is_active' => 0],
+                ['customer_id = ? and is_active = 1' => $customerId]
+            );
+
+            $quote->setIsActive(true);
+            $this->quoteRepository->save($quote);
+
+            $connection->commit();
+        } catch (\Throwable $e) {
+            $connection->rollBack();
+            throw new CouldNotSaveException(
+                __('There has been ar error while trying to active the quote. Message: %1', $e->getMessage()),
+                $e
+            );
+        }
+
         $this->eventManager->dispatch(
             'immutable_quote_activated',
             [
@@ -115,5 +138,18 @@ class ImmutableQuoteManagement implements ImmutableQuoteManagementInterface
         );
 
         return true;
+    }
+
+    /**
+     * @param int $quoteId
+     * @return bool
+     */
+    private function isAssociatedToOrder(int $quoteId): bool
+    {
+        $collection = $this->orderCollectionFactory->create();
+        $collection->addFieldToFilter('quote_id', $quoteId);
+        $collection->setPageSize(1);
+
+        return $collection->getSize() > 0;
     }
 }

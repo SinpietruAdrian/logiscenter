@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Checkout\Model\DefaultConfigProvider">
+        <plugin name="immutable_quote_filter_addresses"
+                type="Logiscenter\ImmutableQuote\Plugin\UpdateCheckoutConfig"/>
+    </type>
+    <type name="Logiscenter\ImmutableQuote\Observer\FrontendGuard">
+        <arguments>
+            <argument name="restrictedActionsList" xsi:type="array">
+                <item name="checkout_cart_add" xsi:type="string">checkout_cart_add</item>
+                <item name="checkout_cart_delete" xsi:type="string">checkout_cart_delete</item>
+                <item name="checkout_cart_updateItemQty" xsi:type="string">checkout_cart_updateItemQty</item>
+                <item name="checkout_cart_updatePost" xsi:type="string">checkout_cart_updatePost</item>
+                <item name="checkout_sidebar_updateItemQty" xsi:type="string">checkout_sidebar_updateItemQty</item>
+                <item name="checkout_cart_configure" xsi:type="string">checkout_cart_configure</item>
+                <item name="checkout_sidebar_removeItem" xsi:type="string">checkout_sidebar_removeItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="immutable_quote_prevent_merge" type="Logiscenter\ImmutableQuote\Plugin\PreventMerge"/>
+    </type>
+</config>
