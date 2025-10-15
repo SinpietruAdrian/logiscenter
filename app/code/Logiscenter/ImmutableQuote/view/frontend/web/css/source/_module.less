@@ -1,0 +1,33 @@
+.immutable_quote-customer-quotes {
+    .list-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .list-wrapper .quote {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .list-wrapper .quote .locked {
+        color: red;
+        font-weight: bold;
+    }
+
+    .list-wrapper .quote .active {
+        color: green;
+        font-weight: bold;
+    }
+
+    .list-wrapper .quote .activate {
+        color: blue;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+}

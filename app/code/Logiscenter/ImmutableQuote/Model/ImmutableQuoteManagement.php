@@ -96,7 +96,7 @@ class ImmutableQuoteManagement implements ImmutableQuoteManagementInterface
     {
         $quote = $this->quoteRepository->get($quoteId);
         if ((int)$quote->getCustomerId() !== $customerId) {
-            throw new LocalizedException(__('Quote does not belong the logged in customer'));
+            throw new LocalizedException(__('Quote does not belong to the logged in customer'));
         }
 
         if ($this->isAssociatedToOrder($quoteId)) {

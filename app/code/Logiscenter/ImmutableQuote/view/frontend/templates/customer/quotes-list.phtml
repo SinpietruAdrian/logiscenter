@@ -1,0 +1,53 @@
+<?php
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Logiscenter\ImmutableQuote\ViewModel\CustomerQuotes;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+
+$viewModel = $this->getData('view_model');
+if (!$viewModel instanceof CustomerQuotes) {
+    return;
+}
+
+$customerQuotes = $viewModel->getCustomerQuotes();
+?>
+
+<?php if (!$customerQuotes): ?>
+    <?= $escaper->escapeHtml(__('No available quotes found')) ?>
+<?php else : ?>
+    <div class="list-wrapper">
+        <?php foreach ($customerQuotes as $quote): ?>
+            <?php
+            $isImmutableQuote = $viewModel->isImmutableQuote($quote);
+            $title = __('Normal Quote');
+            if ($isImmutableQuote) {
+                $title = __(
+                    'Immutable Quote (%1)',
+                    $viewModel->getQuoteMetadataByCode((int)$quote->getId(), 'title')
+                );
+            }
+            ?>
+            <div class="quote">
+                <a class="title" href="<?= $escaper->escapeUrl($block->getUrl('immutable_quote/quote/view', ['quote_id' => $quote->getId()])) ?>">
+                    <?= $escaper->escapeHtml($title) ?>
+                </a>
+                <?php if ($isImmutableQuote): ?>
+                    <span class="locked"><?= $escaper->escapeHtml(__('Locked')) ?></span>
+                <?php endif; ?>
+                <?php if ($quote->getIsActive()): ?>
+                    <span class="active"><?= $escaper->escapeHtml(__('Active')) ?></span>
+                <?php else: ?>
+                    <span class="activate" data-quote-id="<?= $escaper->escapeHtmlAttr($quote->getId()) ?>">
+                        <?= $escaper->escapeHtml(__('Activate')) ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+<?php endif ?>
+
+

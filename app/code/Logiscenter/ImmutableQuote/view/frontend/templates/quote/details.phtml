@@ -1,0 +1,65 @@
+<?php
+
+use Magento\Framework\Escaper;
+use Magento\Checkout\Block\Cart\AbstractCart;
+use Logiscenter\ImmutableQuote\ViewModel\QuoteDetails;
+
+/** @var Escaper $escaper */
+/** @var  AbstractCart $block */
+
+$viewModel = $this->getData('view_model');
+if (!$viewModel instanceof QuoteDetails) {
+    return;
+}
+
+$quote = $viewModel->getQuote();
+$quoteItems = $viewModel->getQuote()->getAllVisibleItems();
+?>
+
+<div class="details-wrapper">
+    <div class="quote-items">
+        <?php foreach ($quoteItems as $item) :?>
+        <div class="item-wrapper">
+            <?=$block->getItemHtml($item)?>
+        </div>
+        <?php endforeach;?>
+    </div>
+    <div class="quote-details">
+        <div class="shipping-address">
+            <p class="section-title"><?=$escaper->escapeHtml(__('Shipping Address'))?></p>
+            <?=$escaper->escapeHtml($viewModel->renderAddress($quote->getShippingAddress()), ['br'])?>
+        </div>
+        <div class="billing-address">
+            <p class="section-title"><?=$escaper->escapeHtml(__('Billing Address'))?></p>
+            <?=$escaper->escapeHtml($viewModel->renderAddress($quote->getBillingAddress()), ['br'])?>
+        </div>
+        <div class="shipping-method">
+            <p class="section-title"><?=$escaper->escapeHtml(__('Shipping Method'))?></p>
+            <?=$escaper->escapeHtml($quote->getShippingAddress()->getShippingDescription())?>
+        </div>
+    </div>
+</div>
+
+<style>
+    .quote-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px; /* space between sections */
+    }
+
+    .quote-details > div {
+        flex: 1; /* each child takes equal width */
+        min-width: 200px; /* prevents elements from becoming too narrow */
+    }
+
+    .quote-details .section-title {
+        font-weight: bold;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .quote-details {
+        margin-top: 150px;
+    }
+</style>
