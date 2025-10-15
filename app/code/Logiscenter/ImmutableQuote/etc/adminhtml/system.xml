@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="immutable_quote" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1"
+                 showInStore="1">
+            <tab>sales</tab>
+            <label>Immutable Quote</label>
+            <resource>Logiscenter_ImmutableQuote::manage</resource>
+            <group id="backpressure" translate="label" type="text" sortOrder="1001" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Rate limiting</label>
+                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Enable rate limiting for immutable quote endpoints</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="limit" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Requests limit</label>
+                    <backend_model>Magento\Quote\Model\Backpressure\Config\LimitValue</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="period" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Counter resets in a ...</label>
+                    <source_model>Magento\Quote\Model\Backpressure\Config\PeriodSource</source_model>
+                    <backend_model>Magento\Quote\Model\Backpressure\Config\PeriodValue</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

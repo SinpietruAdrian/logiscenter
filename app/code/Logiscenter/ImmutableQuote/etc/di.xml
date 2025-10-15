@@ -17,4 +17,20 @@
         <plugin name="immutable_quote_filter_shipping_methods"
                 type="Logiscenter\ImmutableQuote\Plugin\FilterShippingMethod"/>
     </type>
+
+    <type name="Magento\Framework\App\Backpressure\SlidingWindow\CompositeLimitConfigManager">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="immutable-quote-activation" xsi:type="object">Logiscenter\ImmutableQuote\Model\Backpressure\ImmutableQuoteConfigManager</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Webapi\Backpressure\CompositeRequestTypeExtractor">
+        <arguments>
+            <argument name="extractors" xsi:type="array">
+                <item name="immutable-quote" xsi:type="object">Logiscenter\ImmutableQuote\Model\Backpressure\WebapiRequestTypeExtractor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

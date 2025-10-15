@@ -16,6 +16,8 @@
                 <item name="checkout_sidebar_updateItemQty" xsi:type="string">checkout_sidebar_updateItemQty</item>
                 <item name="checkout_cart_configure" xsi:type="string">checkout_cart_configure</item>
                 <item name="checkout_sidebar_removeItem" xsi:type="string">checkout_sidebar_removeItem</item>
+                <item name="wishlist_index_cart" xsi:type="string">wishlist_index_cart</item>
+                <item name="wishlist_index_allcart" xsi:type="string">wishlist_index_allcart</item>
             </argument>
         </arguments>
     </type>
