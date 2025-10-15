@@ -3,22 +3,26 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.item.price.unit" template="Magento_Checkout::item/price/unit.phtml"/>
-        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.item.price.row" template="Magento_Checkout::item/price/row.phtml"/>
-
+        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.item.price.unit"
+               template="Magento_Checkout::item/price/unit.phtml"/>
+        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.item.price.row"
+               template="Magento_Checkout::item/price/row.phtml"/>
         <referenceContainer name="content">
             <referenceBlock name="checkout.cart.item.renderers">
-                <block class="Magento\Checkout\Block\Cart\Item\Renderer" name="checkout.cart.item.renderers.default" as="default" template="Magento_Checkout::cart/item/default.phtml"/>
-                <block class="Magento\Checkout\Block\Cart\Item\Renderer" name="checkout.cart.item.renderers.simple" as="simple" template="Magento_Checkout::cart/item/default.phtml"/>
+                <block class="Magento\Checkout\Block\Cart\Item\Renderer" name="checkout.cart.item.renderers.default"
+                       as="default" template="Magento_Checkout::cart/item/default.phtml"/>
+                <block class="Magento\Checkout\Block\Cart\Item\Renderer" name="checkout.cart.item.renderers.simple"
+                       as="simple" template="Magento_Checkout::cart/item/default.phtml"/>
             </referenceBlock>
-
-            <block class="Magento\Checkout\Block\Cart\AbstractCart" name="quote_details" template="Logiscenter_ImmutableQuote::quote/details.phtml" cacheable="false">
+            <block class="Magento\Checkout\Block\Cart\AbstractCart" name="quote_details"
+                   template="Logiscenter_ImmutableQuote::quote/details.phtml" cacheable="false">
                 <arguments>
                     <argument name="view_model" xsi:type="object">
                         Logiscenter\ImmutableQuote\ViewModel\QuoteDetails
                     </argument>
                 </arguments>
-                <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list"/>
+                <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers"
+                       as="renderer.list"/>
             </block>
         </referenceContainer>
     </body>

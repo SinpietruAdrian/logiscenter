@@ -31,3 +31,27 @@
         text-decoration: underline;
     }
 }
+
+.immutable_quote-quote-view {
+    .quote-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px; /* space between sections */
+    }
+
+    .quote-details > div {
+        flex: 1; /* each child takes equal width */
+        min-width: 200px; /* prevents elements from becoming too narrow */
+    }
+
+    .quote-details .section-title {
+        font-weight: bold;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .quote-details {
+        margin-top: 150px;
+    }
+}
