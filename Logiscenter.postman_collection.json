@@ -1,0 +1,273 @@
+{
+	"info": {
+		"_postman_id": "607c1769-89c1-4144-9f8c-deaded4fb270",
+		"name": "Logiscenter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22580185"
+	},
+	"item": [
+		{
+			"name": "Get Admin Token",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let rawData = pm.response.text();",
+							"",
+							"if (rawData && rawData.length > 0) {",
+							"    let token = JSON.parse(rawData);",
+							"    pm.collectionVariables.set(\"TOKEN\", token);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{ADMIN_USERNAME}}\",\n    \"password\": \"{{ADMIN_PASSWORD}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/rest/V1/integration/admin/token",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"rest",
+						"V1",
+						"integration",
+						"admin",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Immutable Quote",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customer_id\": 1,\n    \"quote_title\": \"ff\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/rest/V1/immutable-quotes/quotes",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"rest",
+						"V1",
+						"immutable-quotes",
+						"quotes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activate Quote",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/rest/V1/immutable-quotes/quotes/877/enable",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"rest",
+						"V1",
+						"immutable-quotes",
+						"quotes",
+						"877",
+						"enable"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let rawData = pm.response.text();",
+							"",
+							"if (rawData && rawData.length > 0) {",
+							"    let token = JSON.parse(rawData);",
+							"    pm.collectionVariables.set(\"TOKEN\", token);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"{{CUSTOMER_EMAIL}}\",\n  \"password\": \"{{CUSTOMER_PASSWORD}}\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/rest/V1/integration/customer/token",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"rest",
+						"V1",
+						"integration",
+						"customer",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Customer Quotes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/rest/V1/carts/search?searchCriteria[filter_groups][0][filters][0][field]=customer_id&searchCriteria[filter_groups][0][filters][0][value]=1&searchCriteria[filter_groups][0][filters][0][condition_type]=eq&searchCriteria[filter_groups][1][filters][0][field]=reserved_order_id&searchCriteria[filter_groups][1][filters][0][condition_type]=null",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"rest",
+						"V1",
+						"carts",
+						"search"
+					],
+					"query": [
+						{
+							"key": "searchCriteria[filter_groups][0][filters][0][field]",
+							"value": "customer_id"
+						},
+						{
+							"key": "searchCriteria[filter_groups][0][filters][0][value]",
+							"value": "1"
+						},
+						{
+							"key": "searchCriteria[filter_groups][0][filters][0][condition_type]",
+							"value": "eq"
+						},
+						{
+							"key": "searchCriteria[filter_groups][1][filters][0][field]",
+							"value": "reserved_order_id"
+						},
+						{
+							"key": "searchCriteria[filter_groups][1][filters][0][condition_type]",
+							"value": "null"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{TOKEN}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": ""
+		},
+		{
+			"key": "TOKEN",
+			"value": ""
+		},
+		{
+			"key": "ADMIN_USERNAME",
+			"value": ""
+		},
+		{
+			"key": "ADMIN_PASSWORD",
+			"value": ""
+		},
+		{
+			"key": "CUSTOMER_EMAIL",
+			"value": ""
+		},
+		{
+			"key": "CUSTOMER_PASSWORD",
+			"value": ""
+		}
+	]
+}
