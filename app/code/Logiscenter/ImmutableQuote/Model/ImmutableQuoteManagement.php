@@ -18,7 +18,7 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Quote\Api\Data\CartInterfaceFactory;
 use Magento\Framework\Event\ManagerInterface;
-use PayU\PaymentGateway\Model\Logger\Logger;
+use Psr\Log\LoggerInterface;
 
 class ImmutableQuoteManagement implements ImmutableQuoteManagementInterface
 {
@@ -32,7 +32,7 @@ class ImmutableQuoteManagement implements ImmutableQuoteManagementInterface
         private readonly CustomerRepositoryInterface $customerRepository,
         private readonly ManagerInterface $eventManager,
         private readonly CollectionFactory $orderCollectionFactory,
-        private readonly Logger $logger
+        private readonly LoggerInterface $logger
     )
     {
 
