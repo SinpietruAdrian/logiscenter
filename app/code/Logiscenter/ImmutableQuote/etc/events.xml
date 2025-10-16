@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="immutable_quote_created">
+        <observer name="log_quote_create_action" instance="Logiscenter\ImmutableQuote\Observer\ActionLogger"/>
+    </event>
+    <event name="immutable_quote_activated">
+        <observer name="log_quote_activated_action" instance="Logiscenter\ImmutableQuote\Observer\ActionLogger"/>
+    </event>
+    <event name="immutable_quote_action_blocked">
+        <observer name="log_quote_action_blocked" instance="Logiscenter\ImmutableQuote\Observer\ActionLogger"/>
+    </event>
+</config>

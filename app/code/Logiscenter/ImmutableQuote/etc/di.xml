@@ -21,16 +21,50 @@
     <type name="Magento\Framework\App\Backpressure\SlidingWindow\CompositeLimitConfigManager">
         <arguments>
             <argument name="configs" xsi:type="array">
-                <item name="immutable-quote-activation" xsi:type="object">Logiscenter\ImmutableQuote\Model\Backpressure\ImmutableQuoteConfigManager</item>
+                <item name="immutable-quote-activation" xsi:type="object">
+                    Logiscenter\ImmutableQuote\Model\Backpressure\ImmutableQuoteConfigManager
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Webapi\Backpressure\CompositeRequestTypeExtractor">
+        <arguments>
+            <argument name="extractors" xsi:type="array">
+                <item name="immutable-quote" xsi:type="object">
+                    Logiscenter\ImmutableQuote\Model\Backpressure\WebapiRequestTypeExtractor
+                </item>
             </argument>
         </arguments>
     </type>
 
-    <type name="Magento\Framework\Webapi\Backpressure\CompositeRequestTypeExtractor">
+    <preference for="Logiscenter\ImmutableQuote\Api\Data\ActionLogInterface"
+                type="Logiscenter\ImmutableQuote\Model\ActionLog"/>
+    <preference for="Logiscenter\ImmutableQuote\Api\Data\ActionLogSearchResultsInterface"
+                type="Logiscenter\ImmutableQuote\Model\ActionLogSearchResults"/>
+    <preference for="Logiscenter\ImmutableQuote\Api\ActionLogRepositoryInterface"
+                type="Logiscenter\ImmutableQuote\Model\ActionLogRepository"/>
+
+    <virtualType name="ImmutableQuoteErrorLogHandler" type="Magento\Framework\Logger\Handler\Base">
         <arguments>
-            <argument name="extractors" xsi:type="array">
-                <item name="immutable-quote" xsi:type="object">Logiscenter\ImmutableQuote\Model\Backpressure\WebapiRequestTypeExtractor</item>
+            <argument name="fileName" xsi:type="string">/var/log/immutable_quote_error.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ImmutableQuoteLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">ImmutableQuoteErrorLogHandler</item>
             </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Logiscenter\ImmutableQuote\Observer\ActionLogger">
+        <arguments>
+            <argument name="logger" xsi:type="object">ImmutableQuoteLogger</argument>
+        </arguments>
+    </type>
+    <type name="Logiscenter\ImmutableQuote\Model\ImmutableQuoteManagement">
+        <arguments>
+            <argument name="logger" xsi:type="object">ImmutableQuoteLogger</argument>
         </arguments>
     </type>
 </config>

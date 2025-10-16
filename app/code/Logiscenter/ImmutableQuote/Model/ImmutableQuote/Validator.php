@@ -11,6 +11,8 @@ use Magento\Checkout\Model\Session;
 
 class Validator
 {
+    private ?CartInterface $lastValidatedQuote = null;
+
     public function __construct(
         private readonly Session $checkoutSession,
         private readonly CartRepositoryInterface $cartRepository
@@ -24,6 +26,7 @@ class Validator
      */
     public function isImmutableQuote(CartInterface $quote): bool
     {
+        $this->lastValidatedQuote = $quote;
         if (!$metadata = $quote->getExtensionAttributes()->getMetadata()) {
             return false;
         }
@@ -43,5 +46,13 @@ class Validator
         } catch (NoSuchEntityException $e) {
             return false;
         }
+    }
+
+    /**
+     * @return CartInterface|null
+     */
+    public function getLastValidatedQuote(): ?CartInterface
+    {
+        return $this->lastValidatedQuote;
     }
 }

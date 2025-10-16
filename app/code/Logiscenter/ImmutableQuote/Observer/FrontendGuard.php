@@ -13,6 +13,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Event\ManagerInterface as EventManager;
 
 class FrontendGuard implements ObserverInterface
 {
@@ -22,6 +23,7 @@ class FrontendGuard implements ObserverInterface
         private readonly ActionFlag $actionFlag,
         private readonly RedirectInterface $redirect,
         private readonly SerializerInterface $serializer,
+        private readonly EventManager $eventManger,
         private readonly array $restrictedActionsList = []
     )
     {
@@ -39,8 +41,17 @@ class FrontendGuard implements ObserverInterface
         }
 
         $request = $observer->getRequest();
-        if (in_array($request->getFullActionName(), $this->restrictedActionsList)) {
+        $action = $request->getFullActionName();
+        if (in_array($action, $this->restrictedActionsList)) {
             if ($this->validator->isLockedQuote()) {
+                $this->eventManger->dispatch(
+                    'immutable_quote_action_blocked',
+                    [
+                        'action' => $action,
+                        'quote' => $this->validator->getLastValidatedQuote()
+                    ]
+                );
+
                 $message = __('Action not allowed for immutable quotes');
                 $response = $observer->getControllerAction()->getResponse();
 

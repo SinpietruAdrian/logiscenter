@@ -18,6 +18,7 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Quote\Api\Data\CartInterfaceFactory;
 use Magento\Framework\Event\ManagerInterface;
+use PayU\PaymentGateway\Model\Logger\Logger;
 
 class ImmutableQuoteManagement implements ImmutableQuoteManagementInterface
 {
@@ -30,7 +31,8 @@ class ImmutableQuoteManagement implements ImmutableQuoteManagementInterface
         private readonly CartRepositoryInterface $quoteRepository,
         private readonly CustomerRepositoryInterface $customerRepository,
         private readonly ManagerInterface $eventManager,
-        private readonly CollectionFactory $orderCollectionFactory
+        private readonly CollectionFactory $orderCollectionFactory,
+        private readonly Logger $logger
     )
     {
 
@@ -57,8 +59,15 @@ class ImmutableQuoteManagement implements ImmutableQuoteManagementInterface
 
             return $quoteId;
         } catch (CouldNotSaveException|LocalizedException $e) {
-            $connection->rollBack();
+            $this->logger->error(
+                sprintf(
+                    'Failed to create immutable quote for customer id "%s". Error message: %s',
+                    $customerId,
+                    $e->getMessage()
+                )
+            );
 
+            $connection->rollBack();
             throw new CouldNotSaveException(
                 __('Failed to create empty immutable cart for customer %1', $customerId),
                 $e
@@ -122,6 +131,15 @@ class ImmutableQuoteManagement implements ImmutableQuoteManagementInterface
 
             $connection->commit();
         } catch (\Throwable $e) {
+            $this->logger->error(
+                sprintf(
+                    'Failed to activate quote with id "%s" for customer with id "%s". Error message: %s',
+                    $quoteId,
+                    $customerId,
+                    $e->getMessage()
+                )
+            );
+
             $connection->rollBack();
             throw new CouldNotSaveException(
                 __('There has been ar error while trying to active the quote. Message: %1', $e->getMessage()),
